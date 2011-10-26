@@ -10,6 +10,7 @@ public class ProjectTrial
    private String engine;
    private String cubic;
    private Connection con;
+   private static String findTable;
 
    private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
    private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oraDB";
@@ -23,7 +24,7 @@ public class ProjectTrial
             Class.forName(DB_DRIVER);
             con = DriverManager.getConnection(DB_URL, USER_ID, PASSWORD);
 
-            System.out.println("Welcome!!!");
+            System.out.println("Welcome!!!\n");
          }
 
          catch (SQLException ex)
@@ -90,6 +91,86 @@ public class ProjectTrial
          {
             System.err.println(ex.getMessage());
          }
+         
+         Scanner scIn = new Scanner(System.in);
+         System.out.print("Select a Car make: ");
+         make = scIn.next();
+         
+         findTable(con);
+      }
+      
+      
+      public static void findTable(Connection con)
+      {
+         ResultSet rs = null;
+         String stmntStr = "SELECT APLNAME FROM APLLIST WHERE MAKER='"+make.toUpperCase()+"'";
+         try
+         {
+         Statement stmnt = con.createStatement();
+         rs = stmnt.executeQuery(stmntStr);
+         while(rs.next())
+            try
+         {
+            int i = 1;
+            while(true)
+            {
+               findTable = rs.getString(i);
+               i++;
+            }
+         }
+         catch(Exception e)
+         {
+
+         }
+         finally
+         {
+            System.out.println();
+         }
+
+      }
+      catch (SQLException ex)
+      {
+         System.err.println(ex.getMessage());
+      }
+         
+         queryModels(con);
+      }
+      public static void queryModels(Connection con)
+      {
+         ResultSet rs = null;
+         String stmntStr = "SELECT MODEL FROM " + findTable;
+        
+
+         try
+         {
+            Statement stmnt = con.createStatement();
+            rs = stmnt.executeQuery(stmntStr);
+            while(rs.next())
+            try
+            {
+               int i = 1;
+               while(true)
+               {
+                  System.out.print(rs.getString(i) + " ");
+                  i++;
+               }
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+               System.out.println();
+            }
+
+         }
+         catch (SQLException ex)
+         {
+            System.err.println(ex.getMessage());
+         }
+         
+         
       }
    public static void main(String args[])
    {
